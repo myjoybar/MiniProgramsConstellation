@@ -1,0 +1,35 @@
+<import src="/page/common/head.wxml" />
+<import src="/page/common/foot.wxml" />
+<import src="/page/message/broadcastitem.wxml" />
+<view class="flex-vertical ">
+  <view class='divider_horizontal_line'></view>
+  <!-- <template is="head" data="{{title: 'scroll-view'}}" /> -->
+  <text class="padding-vertical-20 text-content-margin-left-40">水瓶座*小报</text>
+
+  <view>
+    <view class="page-section-spacing">
+      <scroll-view scroll-y="true">
+        <view id="demo1" class="scroll-view-item ">
+          <!-- <template is="broadcastitem" data="{{publishTimestamp: '02/10',startValidTimestamp: '2018.02.10',endValidTimestamp: '02.10',title: 'scroll-view',broadcastMessage:'有人可能觉得你在做白日梦，脑袋云里雾里。你现在的某个梦想也许是白日梦吧，但并不代表你不能实现它。制定切实的计划，白日梦也能成真。今天就开始踏出第一步'}}"/>   -->
+
+          <block wx:for="{{listBroadcast}}" wx:for-item="itemBroadcast">
+            <template is="broadcastitem" data="{{itemBroadcast}}" />
+          </block>
+        </view>
+
+        <view class="weui-loadmore" hidden="{{isHideLoadMore}}">
+          <view class="weui-loading"></view>
+          <view class="weui-loadmore__tips">正在加载</view>
+        </view>
+
+        <view hidden="{{isHideBottom}}">
+          <text class='flex-horizontal-center padding-20'>往事已随风,勿念</text>
+        </view>
+         <!-- <button bindtap="makeRequest" type="primary" bindtap="startShare">request</button>  -->
+      </scroll-view>
+    </view>
+
+  </view>
+  <!-- <template is="foot" /> -->
+
+</view>
