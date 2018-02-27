@@ -1,4 +1,5 @@
 //app.js
+const updateUserInfoUrl = require('./config.js').updateUserInfoUrl
 App({
   onLaunch: function () {
     // //调用API从本地缓存中获取数据
@@ -23,6 +24,7 @@ App({
       success: function (res) {
         console.log('res.userInfo.nickName=' + res.userInfo.nickName)
         console.log('res.userInfo.avatarUrl=' + res.userInfo.avatarUrl)
+        updateUserInfo(res.userInfo.nickName, res.userInfo.avatarUrl);
       },
     })
 
@@ -42,6 +44,31 @@ App({
   },
 
 })
+
+var updateUserInfo = function ( nickName, avatarUrl) {
+  wx.request({
+    url: updateUserInfoUrl,
+    header: { "Content-Type": "application/x-www-form-urlencoded" },
+    method: 'POST',
+    data: {
+      // noncestr: Date.now(),
+      nickName: nickName,
+      avatarUrl: avatarUrl,
+    },
+
+    success: function (result) {
+      console.log('request success', result)
+    },
+    fail: function ({ errMsg }) {
+      console.log('request fail', errMsg)
+     
+    },
+    complete: function () {
+      console.log('complete')
+    }
+  })
+
+}
 
 
 

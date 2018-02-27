@@ -18,7 +18,7 @@ Page({
   onLoad: function () {
     console.log('onLoad')
     var that = this;
-    getBroadcastList(that, CONSTELLATION_TYPE, PAGE_NUMBER, PAGE_SIZE);
+    getBroadcastList(that, CONSTELLATION_TYPE, PAGE_NUMBER, PAGE_SIZE,false);
   },
   startShare: function (e) {
     console.log('strat startShare')
@@ -53,7 +53,7 @@ Page({
     setTimeout(function () {
       // complete
       console.log('complete onPullDownRefresh')
-      getBroadcastList(that, CONSTELLATION_TYPE, 0, PAGE_SIZE);
+      getBroadcastList(that, CONSTELLATION_TYPE, 0, PAGE_SIZE,true);
       stopRefresh();
     }, 1500);
   },
@@ -71,8 +71,7 @@ Page({
     setLoadMoreHideStatus(that, false);
     setTimeout(function () {
       // complete
-      console.log('complete loadmore')
-      getBroadcastList(that, CONSTELLATION_TYPE, PAGE_NUMBER, PAGE_SIZE);
+      getBroadcastList(that, CONSTELLATION_TYPE, PAGE_NUMBER, PAGE_SIZE,false);
       setLoadMoreHideStatus(that, true);
 
     }, 2500);
@@ -104,10 +103,13 @@ var setBottomTipHideStatus = function (that, status) {
 }
 
 
-var getBroadcastList = function (that, constellationType, pageNumber, pageSize) {
+var getBroadcastList = function (that, constellationType, pageNumber, pageSize,isRefresh) {
   console.log('strat request')
   var self = that
   console.log('getListUrl=' + getListUrl)
+  console.log('pageNumber=' + pageNumber)
+  console.log('pageSize=' + pageSize)
+  console.log('constellationType=' + constellationType)
   //let getListUrl = 'https://baobab.kaiyanapp.com/api/v4/discovery'
   wx.request({
     url: getListUrl,
@@ -123,11 +125,12 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize) 
     success: function (result) {
       var self1 = self
       //console.log(' success listBroadcast.length=' + self1.listBroadcast.length)
-      PAGE_NUMBER++;
-      if (pageNumber == 0) {
+      if (isRefresh) {
         console.log('clear listBroadcast')
+        PAGE_NUMBER = 0;
         self.data.listBroadcast = [];//清空数组 
       }
+      PAGE_NUMBER++;
       let realResult = result.data;
       console.log('realResult.code =' + realResult.code)
       if (result.code == 200) {
@@ -175,7 +178,7 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize) 
       })
     },
     complete: function () {
-      if (pageNumber == 0) {
+      if (isRefresh) {
         stopRefresh();
       } else {
         setLoadMoreHideStatus(self, true);
