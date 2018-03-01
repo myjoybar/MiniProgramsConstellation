@@ -13,26 +13,59 @@ Page({
   data: {
     listBroadcast: [],
     isHideBottom: true,
-    isHideLoadMore: true
+    isHideLoadMore: true,
+    isHideEmptyData: true,
+    constellationType:1,
+    arrayConstellation: ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座 ', '处女座', '天秤座', '天蝎座', '射手座', '魔羯座 ', '水瓶座 ', '双鱼座'],
+    arrayConstellationImage: ['con1.png', 'con2.png', 'con3.png', 'con4.png', 'con5.png ', 'con6.png', 'con7.png', 'con8.png', 'con9.png', 'con10.png ', 'con11.png ', 'con12.png'],
+    arrayConstellationDate: ['白羊座 ( 03/21 - 04/20 )', '金牛座 ( 04/21 - 05/20)', '双子座 ( 05/21 - 06/21)', '巨蟹座 ( 06/22- 07/22)', '狮子座 ( 07/23 - 08/22)', '处女座 ( 08/23 - 09/22)', '天秤座 ( 09/23 - 10/23)', '天蝎座 ( 10/24 - 11/22)', '射手座 ( 11/23 - 12/21)', '魔羯座 ( 12/22 - 01/19)', '水瓶座 ( 01/ 20- 02/18)', '双鱼座 ( 02/19- 03/20）'],
+    index: 0,
+    iconDownStatus: true,
   },
   onLoad: function () {
     console.log('onLoad')
     var that = this;
-    getBroadcastList(that, CONSTELLATION_TYPE, PAGE_NUMBER, PAGE_SIZE,false);
+    getBroadcastList(that, this.data.constellationType, PAGE_NUMBER, PAGE_SIZE,false);
+  },
+  onShow: function () {
+    console.log('onShow')
   },
   startShare: function (e) {
     console.log('strat startShare')
     var self = this
 
+  }, 
+  bindPickerChange: function (e) {
+    this.setData({
+      index: e.detail.value,
+      iconDownStatus: true,
+      constellationType: parseInt(this.data.index)+1,
+    })
+    let currentIndex = parseInt(this.data.index);
+    currentIndex = currentIndex+1;
+    this.setData({
+      constellationType: currentIndex,
+    })
+    PAGE_NUMBER = 0;
+    getBroadcastList(this, this.data.constellationType, PAGE_NUMBER, PAGE_SIZE, false);
   },
+
+  selectConstellation: function (e) {
+    console.log('strat selectConstellation')
+    this.setData({
+     // iconDownStatus: false,
+    })
+  },
+
+
   onShareAppMessage: function (res) {
     if (res.from === 'button') {
       // 来自页面内转发按钮
       console.log(res.target)
     }
     return {
-      title: '自定义转发标题',
-      desc: '最具人气的小程序开发联盟!',
+      title: '超准，快来看哦！',
+      desc: '最具人气的星座运势小报',
       path: '/page/user?id=123',
       success: function (res) {
         // 转发成功
@@ -53,7 +86,7 @@ Page({
     setTimeout(function () {
       // complete
       console.log('complete onPullDownRefresh')
-      getBroadcastList(that, CONSTELLATION_TYPE, 0, PAGE_SIZE,true);
+      getBroadcastList(that, that.data.constellationType, 0, PAGE_SIZE,true);
       stopRefresh();
     }, 1500);
   },
@@ -71,7 +104,7 @@ Page({
     setLoadMoreHideStatus(that, false);
     setTimeout(function () {
       // complete
-      getBroadcastList(that, CONSTELLATION_TYPE, PAGE_NUMBER, PAGE_SIZE,false);
+      getBroadcastList(that, that.data.constellationType, PAGE_NUMBER, PAGE_SIZE,false);
       setLoadMoreHideStatus(that, true);
 
     }, 2500);
@@ -102,6 +135,12 @@ var setBottomTipHideStatus = function (that, status) {
   })
 }
 
+// set empty data view hide status
+var setEmtptyViewHideStatus = function (that, status) {
+  that.setData({
+    isHideEmptyData: status,
+  })
+}
 
 var getBroadcastList = function (that, constellationType, pageNumber, pageSize,isRefresh) {
   console.log('strat request')
@@ -140,7 +179,14 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
       let listLength = listData.length;
       console.log(' listData.length=' + listData.length)
       if (listLength == 0) {
-        console.log('no data')
+        console.log('no data，pageNumber=' + pageNumber)
+        if (pageNumber == 0){
+          setEmtptyViewHideStatus(self1, false);
+          setBottomTipHideStatus(self, true);
+        }
+        that.setData({
+          listBroadcast: listData
+        });
       } else {
         console.log('has data')
         formatTimestamp(listData);
@@ -154,7 +200,7 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
         }else{
           setBottomTipHideStatus(self, true);
         }
-
+        setEmtptyViewHideStatus(self, true);
         that.setData({
           listBroadcast: listData
         });

@@ -4,7 +4,40 @@
 <view class="flex-vertical ">
   <view class='divider_horizontal_line'></view>
   <!-- <template is="head" data="{{title: 'scroll-view'}}" /> -->
-  <text class="padding-vertical-20 text-content-margin-left-40">水瓶座*小报</text>
+  <!-- <text class="padding-vertical-20 text-content-margin-left-40">水瓶座*小报</text> -->
+
+  <!-- <view class='flex-horizontal-center margin-vertical-20' bindtap="selectConstellation">
+    <image class="con-image " src="/image/constellation/con1.png" mode="aspectFill">
+    </image>
+    <text class="title-padding-horizotal-15">水瓶座</text>
+    <image class="down-image" src="/image/constellation/down.png" mode="aspectFill">
+    </image>
+  </view> -->
+
+
+ <!-- picker -->
+  <picker bindchange="bindPickerChange" value="{{index}}" range="{{arrayConstellationDate}}">
+
+    <view class='flex-horizontal-center margin-vertical-20' bindtap="selectConstellation">
+      <image class="con-image" src='/image/constellation/{{arrayConstellationImage[index]}}' mode="aspectFill">
+      </image>
+      <text class="title-padding-horizotal-15">{{arrayConstellation[index]}}</text>
+      <image class="down-image" src="{{iconDownStatus?'/image/constellation/down.png':'/image/constellation/up.png'}}" mode="aspectFill">
+      </image>
+    </view>
+
+
+  </picker>
+
+ <!-- empty data -->
+<view class='flex-center' hidden="{{isHideEmptyData}}"> 
+ <text class="">数据飞到火星上去了</text>
+</view>
+
+  <!-- <view class="page_bd">
+        <view class="body_head" bindtap="selectConstellation">点击我显示下拉列表</view>
+        <navigator url="../views/navigators/navigator1/navigator1"><view class="{{open?'display_show':'display_none'}}">列表1</view></navigator>
+    </view> -->
 
   <view>
     <view class="page-section-spacing">
@@ -25,7 +58,7 @@
         <view hidden="{{isHideBottom}}">
           <text class='flex-horizontal-center padding-20'>往事已随风,勿念</text>
         </view>
-         <!-- <button bindtap="makeRequest" type="primary" bindtap="startShare">request</button>  -->
+        <!-- <button bindtap="makeRequest" type="primary" bindtap="startShare">request</button>  -->
       </scroll-view>
     </view>
 

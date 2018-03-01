@@ -91,3 +91,29 @@
 	-o-border-radius: 5px;
 	border-radius: 5px;
 }
+.con-image{
+  width: 1.5em; 
+  height: 1.5em;
+}
+
+.down-image{
+  width: 0.8em; 
+  height: 0.8em;
+}
+.padding-top-10{
+  padding-top: 12rpx;
+}
+.title-padding-horizotal-15 {
+  padding-left: 15rpx;
+  padding-right: 15rpx;
+}
+
+.display_show{
+    display: block;
+    border: 1px solid;    
+    border-color: beige;
+    padding: 10px;
+}
+.display_none{
+    display: none;
+}
