@@ -5,9 +5,11 @@ const getListUrl = require('../../config.js').getBroadcastUrl
 const duration = 2000
 var app = getApp()
 var PAGE_NUMBER = 0;
-var PAGE_SIZE = 3;
+var PAGE_SIZE = 5;
 var MAX_PAGE_COUNT = 10
-var CONSTELLATION_TYPE = 1;
+var CONSTELLATION_TYPE = 1; 
+var DELAY_TIME = 500;
+
 
 Page({
   data: {
@@ -15,6 +17,7 @@ Page({
     isHideBottom: true,
     isHideLoadMore: true,
     isHideEmptyData: true,
+    isHideCenterLoading: true,
     constellationType:1,
     arrayConstellation: ['白羊座', '金牛座', '双子座', '巨蟹座', '狮子座 ', '处女座', '天秤座', '天蝎座', '射手座', '魔羯座 ', '水瓶座 ', '双鱼座'],
     arrayConstellationImage: ['con1.png', 'con2.png', 'con3.png', 'con4.png', 'con5.png ', 'con6.png', 'con7.png', 'con8.png', 'con9.png', 'con10.png ', 'con11.png ', 'con12.png'],
@@ -25,7 +28,12 @@ Page({
   onLoad: function () {
     console.log('onLoad')
     var that = this;
-    getBroadcastList(that, this.data.constellationType, PAGE_NUMBER, PAGE_SIZE,false);
+    setCenterLoadingViewHideStatus(that, false);
+    setTimeout(function () {
+      getBroadcastList(that, that.data.constellationType, PAGE_NUMBER, PAGE_SIZE, false);
+    }, DELAY_TIME);
+
+   
   },
   onShow: function () {
     console.log('onShow')
@@ -47,7 +55,18 @@ Page({
       constellationType: currentIndex,
     })
     PAGE_NUMBER = 0;
-    getBroadcastList(this, this.data.constellationType, PAGE_NUMBER, PAGE_SIZE, false);
+    setCenterLoadingViewHideStatus(this, false);
+    setEmtptyViewHideStatus(this, true);
+    setBottomTipHideStatus(this, true);
+    this.setData({
+      listBroadcast: []
+    });
+    var that = this
+    setTimeout(function () {
+      getBroadcastList(that, that.data.constellationType, PAGE_NUMBER, PAGE_SIZE, false);
+    }, DELAY_TIME);
+
+   // getBroadcastList(this, this.data.constellationType, PAGE_NUMBER, PAGE_SIZE, false);
   },
 
   selectConstellation: function (e) {
@@ -83,12 +102,13 @@ Page({
     console.log('strat onPullDownRefresh')
     wx.showNavigationBarLoading() //在标题栏中显示加载
     var that = this;
+    setBottomTipHideStatus(that, true);
     setTimeout(function () {
       // complete
       console.log('complete onPullDownRefresh')
       getBroadcastList(that, that.data.constellationType, 0, PAGE_SIZE,true);
       stopRefresh();
-    }, 1500);
+    }, DELAY_TIME);
   },
   //加载更多
   onReachBottom: function () {
@@ -107,7 +127,7 @@ Page({
       getBroadcastList(that, that.data.constellationType, PAGE_NUMBER, PAGE_SIZE,false);
       setLoadMoreHideStatus(that, true);
 
-    }, 2500);
+    }, DELAY_TIME);
   }
 })
 
@@ -141,6 +161,13 @@ var setEmtptyViewHideStatus = function (that, status) {
     isHideEmptyData: status,
   })
 }
+
+var setCenterLoadingViewHideStatus = function (that, status) {
+  that.setData({
+    isHideCenterLoading: status,
+  })
+}
+
 
 var getBroadcastList = function (that, constellationType, pageNumber, pageSize,isRefresh) {
   console.log('strat request')
@@ -181,8 +208,9 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
       if (listLength == 0) {
         console.log('no data，pageNumber=' + pageNumber)
         if (pageNumber == 0){
+          setCenterLoadingViewHideStatus(self1, true);
           setEmtptyViewHideStatus(self1, false);
-          setBottomTipHideStatus(self, true);
+          setBottomTipHideStatus(self1, true);
         }
         that.setData({
           listBroadcast: listData
@@ -229,6 +257,7 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
       } else {
         setLoadMoreHideStatus(self, true);
       }
+      setCenterLoadingViewHideStatus(self, true);
     }
   })
 }
@@ -240,6 +269,10 @@ var formatTimestamp = function (listBroadcast) {
     listBroadcast[i].displayPublishTimestamp = FormateUtil.formatTimeWithFormat(listBroadcast[i].publishTimestamp / 1000, 'M/D');
     listBroadcast[i].displayStartValidTimestamp = FormateUtil.formatTimeWithFormat(listBroadcast[i].startValidTimestamp / 1000, 'Y.M.D');
     listBroadcast[i].displayEndValidTimestamp = FormateUtil.formatTimeWithFormat(listBroadcast[i].endValidTimestamp / 1000, 'M.D');
+
+    let date = FormateUtil.formatTimeWithFormat(listBroadcast[i].publishTimestamp / 1000, 'Y-M-D');
+    listBroadcast[i].displayWeekDay = FormateUtil.getWeek(new Date(date));
+
   }
 }
 var mergeListdata = function (listBroadcast, listdata) {
