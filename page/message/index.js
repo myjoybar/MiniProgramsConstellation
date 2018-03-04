@@ -121,11 +121,13 @@ Page({
 
     console.log('reach the bottom and load more')
     var that = this;
-    setLoadMoreHideStatus(that, false);
+    if (this.data.listBroadcast.lenth != undefined && this.data.listBroadcast.lenth != 0) {
+      console.log('2222222,===' + this.data.listBroadcast.lenth)
+      setLoadMoreHideStatus(that, false);
+    }
     setTimeout(function () {
       // complete
       getBroadcastList(that, that.data.constellationType, PAGE_NUMBER, PAGE_SIZE,false);
-      setLoadMoreHideStatus(that, true);
 
     }, DELAY_TIME);
   }
@@ -250,6 +252,8 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
       self.setData({
         loading: false
       })
+      setCenterLoadingViewHideStatus(self, true);
+      setEmtptyViewHideStatus(self, false);
     },
     complete: function () {
       if (isRefresh) {

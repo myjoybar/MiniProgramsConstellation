@@ -1,10 +1,9 @@
 page {  
   display: block;  
   min-height: 100%;  
-   background-color: #F6F9F9;   
+   background-color: #F1F0F5;   
     /* background-color: #F1F0F5;   */
 } 
-
 
 .container {
   height: 100%;

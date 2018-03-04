@@ -1,15 +1,12 @@
 <template name="broadcastitem">
   <view class='margin-vertical-14 content_white'>
-  
 
-  
-   
     <view class='padding-vertical-14 padding-horizotal-20'>
-      <text class='constellation_msg_inner_date_txt'>{{itemBroadcast.displayStartValidTimestamp}}-{{itemBroadcast.displayEndValidTimestamp}}</text>
+      <!-- <text class='constellation_msg_inner_date_txt'>{{itemBroadcast.displayStartValidTimestamp}}-{{itemBroadcast.displayEndValidTimestamp}}</text> -->
       <text class='constellation_msg_content_txt'> {{itemBroadcast.broadcastMessage}}</text>
     </view>
-  <view class='padding-horizotal-20 '>
-     <view class='divider_horizontal_line '></view>
+    <view class='padding-horizotal-20 '>
+      <view class='divider_horizontal_line '></view>
     </view>
 
     <view class='padding-horizotal-20 '>
@@ -19,6 +16,6 @@
       </view>
     </view>
 
-     <view class='divider_horizontal_item_line'></view>
+    <view class='divider_horizontal_item_line'></view>
   </view>
 </template>
