@@ -2,6 +2,6 @@
   "navigationBarTitleText": "星座运势小报",
   "enablePullDownRefresh": true,
    "backgroundColor": "#F1F0F5",
-  "backgroundTextStyle": "light",
+  "backgroundTextStyle": "dark",
   "navigationBarTextStyle": "black"
 }
