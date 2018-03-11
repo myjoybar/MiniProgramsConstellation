@@ -5,8 +5,9 @@ const getListUrl = require('../../config.js').getBroadcastUrl
 const duration = 2000
 var app = getApp()
 var PAGE_NUMBER = 0;
-var PAGE_SIZE = 5;
+var PAGE_SIZE = 10;
 var MAX_PAGE_COUNT = 10
+var CONSTELLATION_TYPE = 1; 
 var CONSTELLATION_TYPE = 1; 
 var DELAY_TIME = 500;
 
@@ -187,7 +188,8 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
       // noncestr: Date.now(),
       pageNumber: pageNumber,
       pageSize: pageSize,
-      constellationType: constellationType
+      constellationType: constellationType,
+       sortDirection:CONSTELLATION_TYPE
     },
 
     success: function (result) {
@@ -213,18 +215,16 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
           setCenterLoadingViewHideStatus(self1, true);
           setEmtptyViewHideStatus(self1, false);
           setBottomTipHideStatus(self1, true);
+          that.setData({
+            listBroadcast: listData
+          });
         }
-        that.setData({
-          listBroadcast: listData
-        });
+       
       } else {
         console.log('has data')
         formatTimestamp(listData);
         listData = mergeListdata(self.data.listBroadcast, listData);
 
-        if (listData.length == realResult.data.totalElements) {
-          setBottomTipHideStatus(self, false);
-        }
         if (listData.length >= MAX_PAGE_COUNT) {
           setBottomTipHideStatus(self, false);
         }else{
@@ -234,7 +234,9 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
         that.setData({
           listBroadcast: listData
         });
-
+        // if (listData.length == realResult.data.totalElements) {
+        //   setBottomTipHideStatus(self, false);
+        // }
       }
       // wx.showToast({
       //   title: '请求成功',
@@ -270,7 +272,7 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
 var formatTimestamp = function (listBroadcast) {
   let listLength = listBroadcast.length;
   for (var i = 0; i < listLength; i++) {
-    listBroadcast[i].displayPublishTimestamp = FormateUtil.formatTimeWithFormat(listBroadcast[i].publishTimestamp / 1000, 'M/D');
+    listBroadcast[i].displayPublishTimestamp = FormateUtil.formatTimeWithFormat(listBroadcast[i].publishTimestamp / 1000, 'M-D');
     listBroadcast[i].displayStartValidTimestamp = FormateUtil.formatTimeWithFormat(listBroadcast[i].startValidTimestamp / 1000, 'Y.M.D');
     listBroadcast[i].displayEndValidTimestamp = FormateUtil.formatTimeWithFormat(listBroadcast[i].endValidTimestamp / 1000, 'M.D');
 
