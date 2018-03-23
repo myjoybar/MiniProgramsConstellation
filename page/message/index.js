@@ -224,16 +224,17 @@ var getBroadcastList = function (that, constellationType, pageNumber, pageSize,i
         console.log('has data')
         formatTimestamp(listData);
         listData = mergeListdata(self.data.listBroadcast, listData);
-
-        if (listData.length >= MAX_PAGE_COUNT) {
-          setBottomTipHideStatus(self, false);
-        }else{
-          setBottomTipHideStatus(self, true);
-        }
         setEmtptyViewHideStatus(self, true);
         that.setData({
           listBroadcast: listData
         });
+        if (listData.length >= MAX_PAGE_COUNT) {
+          setTimeout(function () {
+            setBottomTipHideStatus(self, false);
+          }, DELAY_TIME);
+        } else {
+          setBottomTipHideStatus(self, true);
+        }
         // if (listData.length == realResult.data.totalElements) {
         //   setBottomTipHideStatus(self, false);
         // }
