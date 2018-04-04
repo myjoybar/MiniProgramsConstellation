@@ -28,7 +28,10 @@ page {
   padding-left: 20rpx;
   padding-right: 20rpx;
 }
-
+.padding-horizotal-30 {
+  padding-left: 50rpx;
+  padding-right: 30rpx;
+}
 .padding-vertical-20 {
   padding-top: 20rpx;
   padding-bottom: 20rpx;
